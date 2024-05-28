@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "command": "pipenv run python ../../run.py",
+            "name": "Run Sim",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+    ]   
+}
