@@ -1,0 +1,40 @@
+[app]
+# The name of your app as displayed in the menu
+name = "East Essex Hackspace Neopixel Logo"
+
+# The submenu where your app should appear.
+# One of: "Badge", "Music", "Media", "Apps", "Games"
+category = "Apps"
+
+# OPTIONAL: Same as above, for compatibility with older firmware
+# versions that can't handle categories introduced afterwards.
+# One of: "Badge", "Music", "Apps"
+# menu = "Apps"
+
+# OPTIONAL: If your app prefers wifi to be off or on when entering.
+# Useful if you want more resources (false) or need wifi (true).
+# Remove if you don't want to change wifi state!
+# wifi_preference = false
+
+[entry]
+# The name of your entry point `Application` class
+# class = "NickApp"
+
+[metadata]
+# Your nickname.  Must be at most 32 characters!
+author = "Matt Emerick-Law"
+
+# License of your app as an SPDX identifier: <https://spdx.org/licenses/>
+license = "MIT"
+
+# URL to the repository of your app.
+url = "https://github.com/eehackspace/tildagon-app-eehneopixellogo/"
+
+# Description of your app.  Maximum 140 characters!
+description = "App for controlling the neopixels on the EEH LED Logo Hexpantion"
+
+# Version number of your app.  If you push a commit where this number is
+# increased, we interpret this as a new version being released.
+#
+# Version number must be an integer!
+version = "0.0.1"
