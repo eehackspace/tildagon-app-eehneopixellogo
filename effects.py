@@ -15,14 +15,21 @@ FPS_LIMIT = 20  # Limit FPS
 
 class Effects:
     def __init__(self):
-        self.speed = settings.get('eeh.speed', 5)
+        self.speed = settings.get("eeh.speed", 5)
         self.preview_speed = None
-        self.brightness = settings.get('eeh.brightness', 50)
+        self.brightness = settings.get("eeh.brightness", 50)
         self.preview_brightness = None
-        self.effect_list = ["Rainbow", "Cycle", "Cycle with Tail", "Bounce", "Bounce with Tail", "Fade"]
-        self.effect = settings.get('eeh.effect', "Rainbow")
+        self.effect_list = [
+            "Rainbow",
+            "Cycle",
+            "Cycle with Tail",
+            "Bounce",
+            "Bounce with Tail",
+            "Fade",
+        ]
+        self.effect = settings.get("eeh.effect", "Rainbow")
         self.preview_effect = None
-        self.palette = settings.get('eeh.palette', "RGB")
+        self.palette = settings.get("eeh.palette", "RGB")
         self.preview_palette = None
 
         self.palettes = Palettes()
@@ -32,13 +39,15 @@ class Effects:
         self.position = 0 + SKIP_LED
         self.direction = 1
 
-        self.colour_number=0 # TODO: Should not be needed, current_cycle should be used
+        self.colour_number = (
+            0  # TODO: Should not be needed, current_cycle should be used
+        )
 
         self.init_chain()
 
     def init_chain(self):
-        slot=settings.get("eeh.slot", 1)
-        
+        slot = settings.get("eeh.slot", 1)
+
         _pin_mapping = {
             1: 39,
             2: 35,
@@ -47,19 +56,19 @@ class Effects:
             5: 18,
             6: 3,
         }
-        pin=_pin_mapping[slot]
+        pin = _pin_mapping[slot]
         self.chain = neopixel.NeoPixel(Pin(pin), LED_COUNT + SKIP_LED)
 
     def set_speed(self, speed, preview=0):
         if speed == "11!":
             speed = 11
         if speed != None:
-            speed=int(speed)
+            speed = int(speed)
 
         if preview == 1:
             self.preview_speed = speed
         else:
-            settings.set('eeh.speed', speed)
+            settings.set("eeh.speed", speed)
             settings.save()
             self.speed = speed
 
@@ -72,30 +81,30 @@ class Effects:
     def get_speeds(self):
         speeds = list(range(12))
         string_speeds = [str(speed) for speed in speeds]
-        #string_speeds[-1] = str(string_speeds[-1]) + "!"
+        # string_speeds[-1] = str(string_speeds[-1]) + "!"
         return string_speeds
 
     def set_brightness(self, brightness, preview=0):
         if brightness != None:
-            brightness=int(brightness)
+            brightness = int(brightness)
 
         if preview == 1:
             self.preview_brightness = brightness
         else:
-            settings.set('eeh.brightness', brightness)
+            settings.set("eeh.brightness", brightness)
             settings.save()
             self.brightness = brightness
 
     def get_brightness(self):
         if self.preview_brightness != None:
-            #print(self.preview_brightness)
+            # print(self.preview_brightness)
             return self.preview_brightness
         else:
-            #print(self.brightness)
+            # print(self.brightness)
             return self.brightness
 
     def get_brightnesses(self):
-        brightnesses =list(range(5, 101, 5))
+        brightnesses = list(range(5, 101, 5))
         string_brightnesses = [str(brightness) for brightness in brightnesses]
         return string_brightnesses
 
@@ -103,7 +112,7 @@ class Effects:
         if preview == 1:
             self.preview_effect = effect
         else:
-            settings.set('eeh.effect', effect)
+            settings.set("eeh.effect", effect)
             settings.save()
             self.effect = effect
 
@@ -120,7 +129,7 @@ class Effects:
         if preview == 1:
             self.preview_palette = palette
         else:
-            settings.set('eeh.palette', palette)
+            settings.set("eeh.palette", palette)
             settings.save()
             self.palette = palette
 
@@ -169,8 +178,8 @@ class Effects:
     # Function to set a single LED color
     def set_led(self, index, color, brightness=1.0):
 
-        if index >= 0+SKIP_LED and index < LED_COUNT + SKIP_LED:
-            master_brightness=self.get_brightness()/100
+        if index >= 0 + SKIP_LED and index < LED_COUNT + SKIP_LED:
+            master_brightness = self.get_brightness() / 100
 
             r = int(color[0] * brightness * master_brightness)
             g = int(color[1] * brightness * master_brightness)
@@ -189,32 +198,36 @@ class Effects:
         self.chain.write()
 
     # TODO: Needs better name, both bounces and cycles
-    def bounce(self, bounce=0, withTail = 0):
+    def bounce(self, bounce=0, withTail=0):
         palette = self.palettes.get_palette(self.get_palette())
 
-        current_colour=palette[self.colour_number]
-        
+        current_colour = palette[self.colour_number]
+
         self.clear_leds()
         # print(self.palettes)
         self.set_led(self.position, current_colour)
         if withTail:
-            tail1position=get_indices(list(range(0, LED_COUNT)), self.position, self.direction*-1)
+            tail1position = get_indices(
+                list(range(0, LED_COUNT)), self.position, self.direction * -1
+            )
             self.set_led(tail1position, current_colour, 0.25)
-            tail2position=get_indices(list(range(0, LED_COUNT)), tail1position, self.direction*-1)
+            tail2position = get_indices(
+                list(range(0, LED_COUNT)), tail1position, self.direction * -1
+            )
             self.set_led(tail2position, current_colour, 0.1)
         self.chain.write()
 
         # print(self.position)
         if bounce:
             self.position += self.direction
-            if self.position < 0+SKIP_LED or self.position >= LED_COUNT - SKIP_LED:
+            if self.position < 0 + SKIP_LED or self.position >= LED_COUNT - SKIP_LED:
                 self.direction *= -1
                 self.position += self.direction
         else:
             if self.position >= LED_COUNT - SKIP_LED:
-                self.position=0
+                self.position = 0
             else:
-                self.position=self.position+1
+                self.position = self.position + 1
 
     # Function to fade between colors
     def fade_between_colors(self):
@@ -354,14 +367,14 @@ def keys_before_and_after(numbers_dict, given_number):
 def get_indices(arr, index, direction=1):
     """
     Return the chosen array index and the one after, or before, wrapping around at the end of the array.
-    
+
     :param arr: List of items.
     :param index: Chosen index.
     :param direction: Direction to move ('forward' or 'backward').
     :return: Tuple of the chosen item and the adjacent item in the array.
     """
     n = len(arr)
-    
+
     if direction == 1:
         return arr[(index + 1) % n]
     elif direction == -1:

@@ -17,6 +17,7 @@ from events.input import Buttons, BUTTON_TYPES
 
 from tildagonos import tildagonos
 
+
 class EEHNeoPixelLogo(app.App):
     def __init__(self):
         # Menu setup
@@ -38,8 +39,8 @@ class EEHNeoPixelLogo(app.App):
         self.palettes = Palettes()
 
     def set_slot(self, slot):
-        slot=int(slot)
-        settings.set('eeh.slot', slot)
+        slot = int(slot)
+        settings.set("eeh.slot", slot)
         settings.save()
         self.effects.clear_leds()
         self.effects.init_chain()
@@ -123,7 +124,10 @@ class EEHNeoPixelLogo(app.App):
                 self.effects.set_palette(item, 1)
 
     def set_menu(
-        self, menu_name: Literal["main", "Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
+        self,
+        menu_name: Literal[
+            "main", "Power", "Speed", "Brightness", "Effects", "Palette", "Slot"
+        ],
     ):
         if self.menu:
             self.menu._cleanup()
@@ -139,9 +143,9 @@ class EEHNeoPixelLogo(app.App):
                 select_handler=self.select_handler,
                 change_handler=self.change_handler,
                 back_handler=self.back_handler,
-                position=(["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]).index(
-                    previous_menu
-                ),
+                position=(
+                    ["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
+                ).index(previous_menu),
             )
         elif menu_name == "Power":
             self.menu = Menu(
@@ -167,7 +171,9 @@ class EEHNeoPixelLogo(app.App):
                 select_handler=self.select_handler,
                 change_handler=self.change_handler,
                 back_handler=self.back_handler,
-                position=self.effects.get_brightnesses().index(str(self.effects.get_brightness())),
+                position=self.effects.get_brightnesses().index(
+                    str(self.effects.get_brightness())
+                ),
             )
         elif menu_name == "Effects":
             self.menu = Menu(
@@ -198,7 +204,7 @@ class EEHNeoPixelLogo(app.App):
                 ["1", "2", "3", "4", "5", "6"],
                 select_handler=self.select_handler,
                 back_handler=self.back_handler,
-                position=settings.get("eeh.slot", 1)-1,
+                position=settings.get("eeh.slot", 1) - 1,
             )
 
     def draw(self, ctx):
@@ -251,5 +257,6 @@ class EEHNeoPixelLogo(app.App):
         # else:
         #     for i in range(0,12):
         #         tildagonos.leds[i+1] = (255, 255, 255)
+
 
 __app_export__ = EEHNeoPixelLogo
