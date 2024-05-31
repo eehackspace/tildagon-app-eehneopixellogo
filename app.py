@@ -4,12 +4,13 @@ import app
 from app_components import Menu, Notification, clear_background
 from typing import Literal
 from app_components.tokens import clear_background, set_color
+import settings
 
 
 from .effects import Effects
 from .palettes import Palettes
 
-main_menu_items = ["Power", "Speed", "Effects", "Palette"]
+main_menu_items = ["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
 power_menu_items = ["On", "Off"]
 
 from events.input import Buttons, BUTTON_TYPES
@@ -35,6 +36,13 @@ class EEHNeoPixelLogo(app.App):
         self.power = True
         self.effects = Effects()
         self.palettes = Palettes()
+
+    def set_slot(self, slot):
+        slot=int(slot)
+        settings.set('eeh.slot', slot)
+        settings.save()
+        self.effects.clear_leds()
+        self.effects.init_chain()
 
     def back_handler(self):
         # If in the topmost menu, minimize, otherwise move one menu up.
@@ -69,6 +77,11 @@ class EEHNeoPixelLogo(app.App):
                     self.notification = Notification("Speed = " + item)
                     self.effects.set_speed(item)
                     self.set_menu("main")
+            elif self.current_menu == "Brightness":
+                if item in self.effects.get_brightnesses():
+                    self.notification = Notification("Brightness=" + item)
+                    self.effects.set_brightness(item)
+                    self.set_menu("main")
             elif self.current_menu == "Effects":
                 if item in self.effects.get_effect_list():
                     self.notification = Notification(item)
@@ -78,6 +91,11 @@ class EEHNeoPixelLogo(app.App):
                 if item in self.palettes.get_palette_list():
                     self.notification = Notification(item)
                     self.effects.set_palette(item)
+                    self.set_menu("main")
+            elif self.current_menu == "Slot":
+                if item in ["1", "2", "3", "4", "5", "6"]:
+                    self.notification = Notification("Slot=" + item)
+                    self.set_slot(item)
                     self.set_menu("main")
 
             else:
@@ -92,6 +110,9 @@ class EEHNeoPixelLogo(app.App):
         elif self.current_menu == "Speed":
             if item in self.effects.get_speeds():
                 self.effects.set_speed(item, 1)
+        elif self.current_menu == "Brightness":
+            if item in self.effects.get_brightnesses():
+                self.effects.set_brightness(item, 1)
         elif self.current_menu == "Effects":
             if item in self.effects.get_effect_list():
                 self.effects.set_effect(item, 1)
@@ -101,7 +122,7 @@ class EEHNeoPixelLogo(app.App):
                 self.effects.set_palette(item, 1)
 
     def set_menu(
-        self, menu_name: Literal["main", "Power", "Speed", "Effects", "Palette"]
+        self, menu_name: Literal["main", "Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
     ):
         if self.menu:
             self.menu._cleanup()
@@ -117,7 +138,7 @@ class EEHNeoPixelLogo(app.App):
                 select_handler=self.select_handler,
                 change_handler=self.change_handler,
                 back_handler=self.back_handler,
-                position=(["Power", "Speed", "Effects", "Palette"]).index(
+                position=(["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]).index(
                     previous_menu
                 ),
             )
@@ -136,7 +157,16 @@ class EEHNeoPixelLogo(app.App):
                 select_handler=self.select_handler,
                 change_handler=self.change_handler,
                 back_handler=self.back_handler,
-                position=self.effects.get_speeds().index(self.effects.get_speed()),
+                position=self.effects.get_speeds().index(str(self.effects.get_speed())),
+            )
+        elif menu_name == "Brightness":
+            self.menu = Menu(
+                self,
+                self.effects.get_brightnesses(),
+                select_handler=self.select_handler,
+                change_handler=self.change_handler,
+                back_handler=self.back_handler,
+                position=self.effects.get_brightnesses().index(str(self.effects.get_brightness())),
             )
         elif menu_name == "Effects":
             self.menu = Menu(
@@ -160,6 +190,14 @@ class EEHNeoPixelLogo(app.App):
                 position=self.palettes.get_palette_list().index(
                     self.effects.get_palette()
                 ),
+            )
+        elif menu_name == "Slot":
+            self.menu = Menu(
+                self,
+                ["1", "2", "3", "4", "5", "6"],
+                select_handler=self.select_handler,
+                back_handler=self.back_handler,
+                position=settings.get("eeh.slot", 1)-1,
             )
 
     def draw(self, ctx):

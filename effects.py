@@ -1,6 +1,7 @@
 import time
 import neopixel
 from machine import Pin
+import settings
 
 from .palettes import Palettes
 
@@ -16,12 +17,14 @@ FPS_LIMIT = 50  # Limit FPS
 
 class Effects:
     def __init__(self):
-        self.speed = 5
+        self.speed = settings.get('eeh.speed', 5)
         self.preview_speed = None
-        self.effect_list = ["Rainbow", "Bounce", "Fade"]
-        self.effect = "Fade"
+        self.brightness = settings.get('eeh.brightness', 50)
+        self.preview_brightness = None
+        self.effect_list = ["Rainbow", "Cycle", "Cycle with Tail", "Bounce", "Bounce with Tail", "Fade"]
+        self.effect = settings.get('eeh.effect', "Rainbow")
         self.preview_effect = None
-        self.palette = "RGB"
+        self.palette = settings.get('eeh.palette', "RGB")
         self.preview_palette = None
 
         self.palettes = Palettes()
@@ -30,16 +33,33 @@ class Effects:
         self.current_cycle = 240
         self.position = 0 + SKIP_LED
         self.direction = 1
-        self.chain = neopixel.NeoPixel(Pin(PIN), LED_COUNT + SKIP_LED)
-        # print("effects init")
+        self.init_chain()
+
+    def init_chain(self):
+        slot=settings.get("eeh.slot", 1)
+        
+        _pin_mapping = {
+            1: 39,
+            2: 35,
+            3: 34,
+            4: 11,
+            5: 18,
+            6: 3,
+        }
+        pin=_pin_mapping[slot]
+        self.chain = neopixel.NeoPixel(Pin(pin), LED_COUNT + SKIP_LED)
 
     def set_speed(self, speed, preview=0):
         if speed == "11!":
             speed = 11
+        if speed != None:
+            speed=int(speed)
 
         if preview == 1:
             self.preview_speed = speed
         else:
+            settings.set('eeh.speed', speed)
+            settings.save()
             self.speed = speed
 
     def get_speed(self):
@@ -50,13 +70,40 @@ class Effects:
 
     def get_speeds(self):
         speeds = list(range(12))
-        speeds[-1] = str(speeds[-1]) + "!"
-        return speeds
+        string_speeds = [str(speed) for speed in speeds]
+        #string_speeds[-1] = str(string_speeds[-1]) + "!"
+        return string_speeds
+
+    def set_brightness(self, brightness, preview=0):
+        if brightness != None:
+            brightness=int(brightness)
+
+        if preview == 1:
+            self.preview_brightness = brightness
+        else:
+            settings.set('eeh.brightness', brightness)
+            settings.save()
+            self.brightness = brightness
+
+    def get_brightness(self):
+        if self.preview_brightness != None:
+            #print(self.preview_brightness)
+            return self.preview_brightness
+        else:
+            #print(self.brightness)
+            return self.brightness
+
+    def get_brightnesses(self):
+        brightnesses =list(range(5, 101, 5))
+        string_brightnesses = [str(brightness) for brightness in brightnesses]
+        return string_brightnesses
 
     def set_effect(self, effect, preview=0):
         if preview == 1:
             self.preview_effect = effect
         else:
+            settings.set('eeh.effect', effect)
+            settings.save()
             self.effect = effect
 
     def get_effect(self):
@@ -72,6 +119,8 @@ class Effects:
         if preview == 1:
             self.preview_palette = palette
         else:
+            settings.set('eeh.palette', palette)
+            settings.save()
             self.palette = palette
 
     def get_palette(self):
@@ -86,7 +135,7 @@ class Effects:
         # Check if enough time has passed since the last event
         if current_time - self.last_cycle_time >= interval:
             # Increment cycle
-            self.current_cycle = self.current_cycle + self.get_speed()
+            self.current_cycle = self.current_cycle + settings.get("eeh.speed", 5)
             # print(self.current_cycle)
             if self.current_cycle >= 256:
                 self.current_cycle = 0
@@ -110,15 +159,18 @@ class Effects:
 
     # Function to set a single LED color
     def set_led(self, index, color, brightness=1.0):
-        r = int(color[0] * brightness)
-        g = int(color[1] * brightness)
-        b = int(color[2] * brightness)
-        self.chain[index + SKIP_LED] = (r, g, b)
-        self.chain.write()
+
+        if index >= 0+SKIP_LED and index < LED_COUNT + SKIP_LED:
+            master_brightness=self.get_brightness()/100
+
+            r = int(color[0] * brightness * master_brightness)
+            g = int(color[1] * brightness * master_brightness)
+            b = int(color[2] * brightness * master_brightness)
+            self.chain[index + SKIP_LED] = (r, g, b)
 
     def set_led_all(self, color):
         for i in range(LED_COUNT):
-            self.chain[i + SKIP_LED] = color
+            self.set_led(i, color)
         self.chain.write()
 
     def rainbow(self):
