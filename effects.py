@@ -6,13 +6,11 @@ import settings
 from .palettes import Palettes
 
 # Constants
-LED_COUNT = 12  # Number of NeoPixels
+LED_COUNT = 14  # Number of NeoPixels
 SKIP_LED = (
-    1  # How many LEDs at the beginning of the chain to skip, usefor for Sim testing
+    0  # How many LEDs at the beginning of the chain to skip, use for for Sim testing
 )
-PIN = 21  # Pin connected to the NeoPixels
-
-FPS_LIMIT = 50  # Limit FPS
+FPS_LIMIT = 20  # Limit FPS
 
 
 class Effects:
@@ -30,7 +28,7 @@ class Effects:
         self.palettes = Palettes()
 
         self.last_cycle_time = time.time()
-        self.current_cycle = 240
+        self.current_cycle = 1
         self.position = 0 + SKIP_LED
         self.direction = 1
         self.init_chain()
