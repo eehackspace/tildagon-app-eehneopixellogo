@@ -58,7 +58,7 @@ class EEHNeoPixelLogo(app.App):
             self.effects.set_effect(None, 1)
             self.effects.set_palette(None, 1)
 
-    def select_handler(self, item):
+    def select_handler(self, item, idx):
         # If Power or Preset item selected enter that menu
         if item in main_menu_items:
             self.set_menu(item)
