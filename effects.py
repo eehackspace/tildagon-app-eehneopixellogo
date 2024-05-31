@@ -131,10 +131,12 @@ class Effects:
             return self.palette
 
     def cycle(self):
-        current_time = time.time()
-        interval = 1 / FPS_LIMIT
+        current_time = time.ticks_ms()
+        interval = 1000 / FPS_LIMIT
+
         # Check if enough time has passed since the last event
         if current_time - self.last_cycle_time >= interval:
+
             # Increment cycle
             self.current_cycle = self.current_cycle + settings.get("eeh.speed", 5)
             # print(self.current_cycle)
