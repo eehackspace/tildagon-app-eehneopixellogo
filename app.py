@@ -74,7 +74,7 @@ class EEHNeoPixelLogo(app.App):
                     self.set_menu("main")
             elif self.current_menu == "Speed":
                 if item in self.effects.get_speeds():
-                    self.notification = Notification("Speed = " + item)
+                    self.notification = Notification("Speed=" + item)
                     self.effects.set_speed(item)
                     self.set_menu("main")
             elif self.current_menu == "Brightness":
