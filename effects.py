@@ -184,6 +184,7 @@ class Effects:
         for i in range(LED_COUNT):
             pixel_index = (i * 256 // LED_COUNT) + self.current_cycle
             self.set_led(i, self.hsv_to_rgb(pixel_index / 256, 1.0, 1.0))
+        self.chain.write()
 
     # TODO: Needs better name, both bounces and cycles
     def bounce(self, bounce=0, withTail = 0):
