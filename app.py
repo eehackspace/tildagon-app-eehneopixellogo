@@ -71,6 +71,7 @@ class EEHNeoPixelLogo(app.App):
                 elif item == "Off":
                     self.notification = Notification("Power Off")
                     self.power = False
+                    self.effects.set_led_all((0, 0, 0))
                     self.set_menu("main")
             elif self.current_menu == "Speed":
                 if item in self.effects.get_speeds():
