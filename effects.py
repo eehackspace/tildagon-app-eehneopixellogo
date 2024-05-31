@@ -31,6 +31,9 @@ class Effects:
         self.current_cycle = 1
         self.position = 0 + SKIP_LED
         self.direction = 1
+
+        self.colour_number=0 # TODO: Should not be needed, current_cycle should be used
+
         self.init_chain()
 
     def init_chain(self):
@@ -143,8 +146,14 @@ class Effects:
             effect = self.get_effect()
             if effect == "Rainbow":
                 self.rainbow()
+            elif effect == "Cycle":
+                self.bounce(0, 0)
+            elif effect == "Cycle with Tail":
+                self.bounce(0, 1)
             elif effect == "Bounce":
-                self.bounce()
+                self.bounce(1, 0)
+            elif effect == "Bounce with Tail":
+                self.bounce(1, 1)
             elif effect == "Fade":
                 self.fade_between_colors()
             self.last_cycle_time = current_time
@@ -176,18 +185,33 @@ class Effects:
             pixel_index = (i * 256 // LED_COUNT) + self.current_cycle
             self.set_led(i, self.hsv_to_rgb(pixel_index / 256, 1.0, 1.0))
 
-    def bounce(self):
+    # TODO: Needs better name, both bounces and cycles
+    def bounce(self, bounce=0, withTail = 0):
         palette = self.palettes.get_palette(self.get_palette())
+
+        current_colour=palette[self.colour_number]
+        
         self.clear_leds()
         # print(self.palettes)
-        self.set_led(self.position, palette)
-        self.set_led(self.position - self.direction, palette, 0.25)
-        self.set_led(self.position - self.direction * 2, palette, 0.1)
+        self.set_led(self.position, current_colour)
+        if withTail:
+            tail1position=get_indices(list(range(0, LED_COUNT)), self.position, self.direction*-1)
+            self.set_led(tail1position, current_colour, 0.25)
+            tail2position=get_indices(list(range(0, LED_COUNT)), tail1position, self.direction*-1)
+            self.set_led(tail2position, current_colour, 0.1)
+        self.chain.write()
+
         # print(self.position)
-        self.position += self.direction
-        if self.position < 0 or self.position >= LED_COUNT:
-            self.direction *= -1
+        if bounce:
             self.position += self.direction
+            if self.position < 0+SKIP_LED or self.position >= LED_COUNT - SKIP_LED:
+                self.direction *= -1
+                self.position += self.direction
+        else:
+            if self.position >= LED_COUNT - SKIP_LED:
+                self.position=0
+            else:
+                self.position=self.position+1
 
     # Function to fade between colors
     def fade_between_colors(self):
@@ -322,3 +346,22 @@ def keys_before_and_after(numbers_dict, given_number):
         key_after = keys[0] if keys else None
 
     return key_before, key_after
+
+
+def get_indices(arr, index, direction=1):
+    """
+    Return the chosen array index and the one after, or before, wrapping around at the end of the array.
+    
+    :param arr: List of items.
+    :param index: Chosen index.
+    :param direction: Direction to move ('forward' or 'backward').
+    :return: Tuple of the chosen item and the adjacent item in the array.
+    """
+    n = len(arr)
+    
+    if direction == 1:
+        return arr[(index + 1) % n]
+    elif direction == -1:
+        return arr[(index - 1) % n]
+    else:
+        raise ValueError("Direction must be '1' or '-1'")
