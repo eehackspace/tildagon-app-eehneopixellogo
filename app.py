@@ -1,6 +1,6 @@
 import time
 
-from app import App
+import app
 from app_components import Menu, Notification, clear_background
 from typing import Literal
 from app_components.tokens import clear_background, set_color
@@ -16,8 +16,7 @@ from events.input import Buttons, BUTTON_TYPES
 
 from tildagonos import tildagonos
 
-
-class EEHNeoPixelLogo(App):
+class EEHNeoPixelLogo(app.App):
     def __init__(self):
         # Menu setup
         self.menu = None
@@ -213,3 +212,5 @@ class EEHNeoPixelLogo(App):
         # else:
         #     for i in range(0,12):
         #         tildagonos.leds[i+1] = (255, 255, 255)
+
+__app_export__ = EEHNeoPixelLogo
