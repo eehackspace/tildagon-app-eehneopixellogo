@@ -1,6 +1,6 @@
 [app]
 # The name of your app as displayed in the menu
-name = "East Essex Hackspace Neopixel Logo"
+name = "EEH Logo"
 
 # The submenu where your app should appear.
 # One of: "Badge", "Music", "Media", "Apps", "Games"
@@ -31,10 +31,10 @@ license = "MIT"
 url = "https://github.com/eehackspace/tildagon-app-eehneopixellogo/"
 
 # Description of your app.  Maximum 140 characters!
-description = "App for controlling the neopixels on the EEH LED Logo Hexpantion"
+description = "App for controlling the neopixels on the EEH LED Logo Hexpansion - Come visit us at the East Essex Hackspace Village, north in campsite C OR at the night market Friday and Saturday night."
 
 # Version number of your app.  If you push a commit where this number is
 # increased, we interpret this as a new version being released.
 #
 # Version number must be an integer!
-version = "0.0.1"
+version = "0.0.2"
