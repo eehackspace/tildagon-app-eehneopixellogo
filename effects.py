@@ -147,7 +147,7 @@ class Effects:
         if current_time - self.last_cycle_time >= interval:
 
             # Increment cycle
-            self.current_cycle = self.current_cycle + settings.get("eeh.speed", 5)
+            self.current_cycle = self.current_cycle + self.get_speed()
             # print(self.current_cycle)
             if self.current_cycle >= 256:
                 self.current_cycle = 0
