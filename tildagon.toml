@@ -37,4 +37,4 @@ description = "App for controlling the neopixels on the EEH LED Logo Hexpansion 
 # increased, we interpret this as a new version being released.
 #
 # Version number must be an integer!
-version = "0.0.2"
+version = "0.1.0"

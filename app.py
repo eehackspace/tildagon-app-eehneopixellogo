@@ -17,6 +17,7 @@ main_menu_items = [
     "Effects",
     "Palette",
     "Slot",
+    "Slot 2",
     "About",
 ]
 power_menu_items = ["On", "Off"]
@@ -49,6 +50,14 @@ class EEHNeoPixelLogo(app.App):
     def set_slot(self, slot):
         slot = int(slot)
         settings.set("eeh.slot", slot)
+        settings.save()
+        self.effects.clear_leds()
+        self.effects.init_chain()
+
+    def set_slot2(self, slot):
+        if slot != "None":
+            slot = int(slot)
+        settings.set("eeh.slot2", slot)
         settings.save()
         self.effects.clear_leds()
         self.effects.init_chain()
@@ -106,6 +115,11 @@ class EEHNeoPixelLogo(app.App):
                 if item in ["1", "2", "3", "4", "5", "6"]:
                     self.notification = Notification("Slot=" + item)
                     self.set_slot(item)
+                    self.set_menu("main")
+            elif self.current_menu == "Slot 2":
+                if item in ["None", "1", "2", "3", "4", "5", "6"]:
+                    self.notification = Notification("Slot=" + item)
+                    self.set_slot2(item)
                     self.set_menu("main")
 
             else:
@@ -166,6 +180,7 @@ class EEHNeoPixelLogo(app.App):
                         "Effects",
                         "Palette",
                         "Slot",
+                        "Slot 2",
                         "About",
                     ]
                 ).index(previous_menu),
@@ -230,6 +245,20 @@ class EEHNeoPixelLogo(app.App):
                 position=settings.get("eeh.slot", 1) - 1,
             )
 
+        elif menu_name == "Slot 2":
+            pos = settings.get("eeh.slot2", "None")
+            if pos == "None":
+                pos = 0
+            else:
+                pos = pos + 1
+            self.menu = Menu(
+                self,
+                ["None", "1", "2", "3", "4", "5", "6"],
+                select_handler=self.select_handler,
+                back_handler=self.back_handler,
+                position=pos,
+            )
+
         elif menu_name == "About":
             self.menu = Menu(
                 self,
@@ -274,7 +303,8 @@ class EEHNeoPixelLogo(app.App):
         #        print(self.power)
         if self.power == True:
             self.effects.cycle()
-
+        print(settings.get("eeh.slot"))
+        print(settings.get("eeh.slot2"))
         # if self.button_states.get(BUTTON_TYPES["RIGHT"]):
         #     tildagonos.leds[2] = (255, 0, 0)
         #     tildagonos.leds[3] = (255, 0, 0)

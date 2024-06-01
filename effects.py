@@ -47,6 +47,7 @@ class Effects:
 
     def init_chain(self):
         slot = settings.get("eeh.slot", 1)
+        slot2 = settings.get("eeh.slot2", "None")
 
         _pin_mapping = {
             1: 39,
@@ -58,6 +59,12 @@ class Effects:
         }
         pin = _pin_mapping[slot]
         self.chain = neopixel.NeoPixel(Pin(pin), LED_COUNT + SKIP_LED)
+
+        if slot2 != "None":
+            pin2 = _pin_mapping[slot2]
+            self.chain2 = neopixel.NeoPixel(Pin(pin2), LED_COUNT + SKIP_LED)
+        else:
+            self.chain2 = None
 
     def set_speed(self, speed, preview=0):
         if speed == "11!":
@@ -172,7 +179,11 @@ class Effects:
     def clear_leds(self):
         for i in range(LED_COUNT):
             self.chain[i + SKIP_LED] = (0, 0, 0)
+            if self.chain2 != None:
+                self.chain2[i + SKIP_LED] = (0, 0, 0)
         self.chain.write()
+        if self.chain2 != None:
+            self.chain2.write()
         # Needs altering for actual Hexpasions - remove ' + 1'
 
     # Function to set a single LED color
@@ -185,17 +196,23 @@ class Effects:
             g = int(color[1] * brightness * master_brightness)
             b = int(color[2] * brightness * master_brightness)
             self.chain[index + SKIP_LED] = (r, g, b)
+            if self.chain2 != None:
+                self.chain2[index + SKIP_LED] = (r, g, b)
 
     def set_led_all(self, color):
         for i in range(LED_COUNT):
             self.set_led(i, color)
         self.chain.write()
+        if self.chain2 != None:
+            self.chain2.write()
 
     def rainbow(self):
         for i in range(LED_COUNT):
             pixel_index = (i * 256 // LED_COUNT) + self.current_cycle
             self.set_led(i, self.hsv_to_rgb(pixel_index / 256, 1.0, 1.0))
         self.chain.write()
+        if self.chain2 != None:
+            self.chain2.write()
 
     # TODO: Needs better name, both bounces and cycles
     def bounce(self, bounce=0, withTail=0):
@@ -216,6 +233,8 @@ class Effects:
             )
             self.set_led(tail2position, current_colour, 0.1)
         self.chain.write()
+        if self.chain2 != None:
+            self.chain2.write()
 
         # print(self.position)
         if bounce:

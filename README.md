@@ -14,7 +14,8 @@ The main menu has the following items:
 * Brightness - change the overall master brightness
 * Effects - choose an effect pattern
 * Palette - choose a colour palette
-* Slot - select the slot the hexpansion has been plugged into.
+* Slot - select the slot an EEH NeoPixel hexpansion has been plugged into.
+* Slot 2 - select the second slot an EEH NeoPixel hexpansion has been plugged into.
 
 ## TODO
 
