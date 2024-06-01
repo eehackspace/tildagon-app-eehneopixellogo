@@ -10,7 +10,15 @@ import settings
 from .effects import Effects
 from .palettes import Palettes
 
-main_menu_items = ["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
+main_menu_items = [
+    "Power",
+    "Speed",
+    "Brightness",
+    "Effects",
+    "Palette",
+    "Slot",
+    "About",
+]
 power_menu_items = ["On", "Off"]
 
 from events.input import Buttons, BUTTON_TYPES
@@ -126,7 +134,14 @@ class EEHNeoPixelLogo(app.App):
     def set_menu(
         self,
         menu_name: Literal[
-            "main", "Power", "Speed", "Brightness", "Effects", "Palette", "Slot"
+            "main",
+            "Power",
+            "Speed",
+            "Brightness",
+            "Effects",
+            "Palette",
+            "Slot",
+            "About",
         ],
     ):
         if self.menu:
@@ -144,7 +159,15 @@ class EEHNeoPixelLogo(app.App):
                 change_handler=self.change_handler,
                 back_handler=self.back_handler,
                 position=(
-                    ["Power", "Speed", "Brightness", "Effects", "Palette", "Slot"]
+                    [
+                        "Power",
+                        "Speed",
+                        "Brightness",
+                        "Effects",
+                        "Palette",
+                        "Slot",
+                        "About",
+                    ]
                 ).index(previous_menu),
             )
         elif menu_name == "Power":
@@ -205,6 +228,22 @@ class EEHNeoPixelLogo(app.App):
                 select_handler=self.select_handler,
                 back_handler=self.back_handler,
                 position=settings.get("eeh.slot", 1) - 1,
+            )
+
+        elif menu_name == "About":
+            self.menu = Menu(
+                self,
+                [
+                    "Buy an East",
+                    "Essex Hackspace",
+                    "NeoPixel Hexpansion",
+                    "from the",
+                    "EEH Village",
+                    "in Camping C",
+                    "OR",
+                    "Night Market",
+                ],
+                back_handler=self.back_handler,
             )
 
     def draw(self, ctx):
