@@ -31,10 +31,10 @@ license = "MIT"
 url = "https://github.com/eehackspace/tildagon-app-eehneopixellogo/"
 
 # Description of your app.  Maximum 140 characters!
-description = "App for controlling the neopixels on the EEH LED Logo Hexpansion - Come visit us at the East Essex Hackspace Village, north in campsite C OR at the night market Friday and Saturday night."
+description = "App for controlling the NeoPixels on the EEH LED Logo Hexpansion. Come see us at EMF 2026 if you want to buy one of our hexpansions."
 
 # Version number of your app.  If you push a commit where this number is
 # increased, we interpret this as a new version being released.
 #
 # Version number must be an integer!
-version = "0.1.0"
+version = "0.2.0"

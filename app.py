@@ -265,14 +265,14 @@ class EEHNeoPixelLogo(app.App):
             self.menu = Menu(
                 self,
                 [
-                    "Buy an East",
+                    "Version: 0.2.0",
+                    "",
                     "Essex Hackspace",
                     "NeoPixel Hexpansion",
-                    "from the",
-                    "EEH Village",
-                    "in Camping C",
-                    "OR",
-                    "Night Market",
+                    "eehack.space",
+                    "",
+                    "Next available in",
+                    "2026!",
                 ],
                 back_handler=self.back_handler,
             )
