@@ -104,10 +104,8 @@ class Effects:
 
     def get_brightness(self):
         if self.preview_brightness != None:
-            # print(self.preview_brightness)
             return self.preview_brightness
         else:
-            # print(self.brightness)
             return self.brightness
 
     def get_brightnesses(self):
@@ -155,12 +153,9 @@ class Effects:
 
             # Increment cycle
             self.current_cycle = self.current_cycle + self.get_speed()
-            # print(self.current_cycle)
             if self.current_cycle >= 256:
                 self.current_cycle = 0
 
-            # print(self.current_cycle)
-            # print("effects cycle")
             effect = self.get_effect()
             if effect == "Rainbow":
                 self.rainbow()
@@ -221,7 +216,6 @@ class Effects:
         current_colour = palette[self.colour_number]
 
         self.clear_leds()
-        # print(self.palettes)
         self.set_led(self.position, current_colour)
         if withTail:
             tail1position = get_indices(
@@ -236,7 +230,6 @@ class Effects:
         if self.chain2 != None:
             self.chain2.write()
 
-        # print(self.position)
         if bounce:
             self.position += self.direction
             if self.position < 0 + SKIP_LED or self.position >= LED_COUNT - SKIP_LED:
@@ -259,10 +252,7 @@ class Effects:
         color1 = colors[key_before]
         color2 = colors[key_after]
         # Interpolate colours
-        # print(self.current_cycle)
         t = find_percentage(self.current_cycle, key_before, key_after)
-        # print("t")
-        # print(t)
         color = self.interpolate_color(color1, color2, t)
 
         # Set LEDs

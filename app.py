@@ -265,7 +265,7 @@ class EEHNeoPixelLogo(app.App):
             self.menu = Menu(
                 self,
                 [
-                    "Version: 0.2.0",
+                    "Version: 0.2.1",
                     "",
                     "Essex Hackspace",
                     "NeoPixel Hexpansion",
@@ -297,37 +297,9 @@ class EEHNeoPixelLogo(app.App):
         if self.notification:
             self.notification.update(delta)
 
-    #        print(self.power)
-
     def background_update(self, delta):
-        #        print("background_update")
-        #        print(time.time())
-        #        print(self.power)
         if self.power == True:
             self.effects.cycle()
-        print(settings.get("eeh.slot"))
-        print(settings.get("eeh.slot2"))
-        # if self.button_states.get(BUTTON_TYPES["RIGHT"]):
-        #     tildagonos.leds[2] = (255, 0, 0)
-        #     tildagonos.leds[3] = (255, 0, 0)
-        # elif self.button_states.get(BUTTON_TYPES["LEFT"]):
-        #     tildagonos.leds[8] = (0, 255, 0)
-        #     tildagonos.leds[9] = (0, 255, 0)
-        # elif self.button_states.get(BUTTON_TYPES["UP"]):
-        #     tildagonos.leds[12] = (0, 0, 255)
-        #     tildagonos.leds[1] = (0, 0, 255)
-        # elif self.button_states.get(BUTTON_TYPES["DOWN"]):
-        #     tildagonos.leds[6] = (255, 255, 0)
-        #     tildagonos.leds[7] = (255, 255, 0)
-        # elif self.button_states.get(BUTTON_TYPES["CANCEL"]):
-        #     tildagonos.leds[10] = (0, 255, 255)
-        #     tildagonos.leds[11] = (0, 255, 255)
-        # elif self.button_states.get(BUTTON_TYPES["CONFIRM"]):
-        #     tildagonos.leds[4] = (255, 0, 255)
-        #     tildagonos.leds[5] = (255, 0, 255)
-        # else:
-        #     for i in range(0,12):
-        #         tildagonos.leds[i+1] = (255, 255, 255)
 
 
 __app_export__ = EEHNeoPixelLogo
