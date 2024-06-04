@@ -16,10 +16,11 @@ main_menu_items = [
     "Brightness",
     "Effects",
     "Palette",
-    "Slot",
-    "Slot 2",
+    "Main Slot",
+    "Mirror Slot",
     "About",
 ]
+
 power_menu_items = ["On", "Off"]
 
 from events.input import Buttons, BUTTON_TYPES
@@ -111,12 +112,12 @@ class EEHNeoPixelLogo(app.App):
                     self.notification = Notification(item)
                     self.effects.set_palette(item)
                     self.set_menu("main")
-            elif self.current_menu == "Slot":
+            elif self.current_menu == "Main Slot":
                 if item in ["1", "2", "3", "4", "5", "6"]:
                     self.notification = Notification("Slot=" + item)
                     self.set_slot(item)
                     self.set_menu("main")
-            elif self.current_menu == "Slot 2":
+            elif self.current_menu == "Mirror Slot":
                 if item in ["None", "1", "2", "3", "4", "5", "6"]:
                     self.notification = Notification("Slot=" + item)
                     self.set_slot2(item)
@@ -154,7 +155,8 @@ class EEHNeoPixelLogo(app.App):
             "Brightness",
             "Effects",
             "Palette",
-            "Slot",
+            "Main Slot",
+            "Mirror Slot",
             "About",
         ],
     ):
@@ -179,8 +181,8 @@ class EEHNeoPixelLogo(app.App):
                         "Brightness",
                         "Effects",
                         "Palette",
-                        "Slot",
-                        "Slot 2",
+                        "Main Slot",
+                        "Mirror Slot",
                         "About",
                     ]
                 ).index(previous_menu),
@@ -236,7 +238,7 @@ class EEHNeoPixelLogo(app.App):
                     self.effects.get_palette()
                 ),
             )
-        elif menu_name == "Slot":
+        elif menu_name == "Main Slot":
             self.menu = Menu(
                 self,
                 ["1", "2", "3", "4", "5", "6"],
@@ -245,7 +247,7 @@ class EEHNeoPixelLogo(app.App):
                 position=settings.get("eeh.slot", 1) - 1,
             )
 
-        elif menu_name == "Slot 2":
+        elif menu_name == "Mirror Slot":
             pos = settings.get("eeh.slot2", "None")
             if pos == "None":
                 pos = 0
